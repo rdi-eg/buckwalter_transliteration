@@ -1,6 +1,8 @@
 #ifndef AR_LETTER_DEFINITIONS_H
 #define AR_LETTER_DEFINITIONS_H
 
+#include <string>
+
 #define HAMZA            L'\u0621'
 #define ALEF_MADDA       L'\u0622'
 #define ALEF_HAMZA_ABOVE L'\u0623'
@@ -46,7 +48,6 @@
 #define KASRA            L'\u0650'
 #define SHADA            L'\u0651'
 #define SKOON            L'\u0652'
-
 
 // same thing but strings instead of chars
 #define S_HAMZA            L"\u0621"
@@ -94,5 +95,183 @@
 #define S_KASRA            L"\u0650"
 #define S_SHADA            L"\u0651"
 #define S_SKOON            L"\u0652"
+
+extern const wchar_t arabic_letters_with_tashkeel[] =
+{
+	HAMZA           ,
+	ALEF_MADDA      ,
+	ALEF_HAMZA_ABOVE,
+	WAW_HAMZA_ABOVE ,
+	ALEF_HAMZA_BELOW,
+	YEH_HAMZA_ABOVE ,
+	ALEF_NO_HAMZA   ,
+	BEH             ,
+	TEH_MARBOOTA    ,
+	TEH             ,
+	THEH            ,
+	JEEM            ,
+	HAH             ,
+	KHAH            ,
+	DAL             ,
+	THAL            ,
+	REH             ,
+	ZAIN            ,
+	SEEN            ,
+	SHEEN           ,
+	SAD             ,
+	DAD             ,
+	TAH             ,
+	ZAH             ,
+	AIN             ,
+	GHAIN           ,
+	FEH             ,
+	QAF             ,
+	KAF             ,
+	LAM             ,
+	MEEM            ,
+	NOON            ,
+	HEH             ,
+	WAW             ,
+	YEH_NO_DOTS     ,
+	YEH_WITH_DOTS   ,
+	TATWEEL         ,
+	TANWEEN_FATHA   ,
+	TANWEEN_DAMA    ,
+	TANWEEN_KASRA   ,
+	FATHA           ,
+	DAMA            ,
+	KASRA           ,
+	SHADA           ,
+	SKOON
+};
+
+extern const wchar_t arabic_letters_without_tashkeel[] =
+{
+	HAMZA           ,
+	ALEF_MADDA      ,
+	ALEF_HAMZA_ABOVE,
+	WAW_HAMZA_ABOVE ,
+	ALEF_HAMZA_BELOW,
+	YEH_HAMZA_ABOVE ,
+	ALEF_NO_HAMZA   ,
+	BEH             ,
+	TEH_MARBOOTA    ,
+	TEH             ,
+	THEH            ,
+	JEEM            ,
+	HAH             ,
+	KHAH            ,
+	DAL             ,
+	THAL            ,
+	REH             ,
+	ZAIN            ,
+	SEEN            ,
+	SHEEN           ,
+	SAD             ,
+	DAD             ,
+	TAH             ,
+	ZAH             ,
+	AIN             ,
+	GHAIN           ,
+	FEH             ,
+	QAF             ,
+	KAF             ,
+	LAM             ,
+	MEEM            ,
+	NOON            ,
+	HEH             ,
+	WAW             ,
+	YEH_NO_DOTS     ,
+	YEH_WITH_DOTS
+};
+
+extern const std::wstring s_arabic_letters_with_tashkeel[] =
+{
+	S_HAMZA           ,
+	S_ALEF_MADDA      ,
+	S_ALEF_HAMZA_ABOVE,
+	S_WAW_HAMZA_ABOVE ,
+	S_ALEF_HAMZA_BELOW,
+	S_YEH_HAMZA_ABOVE ,
+	S_ALEF_NO_HAMZA   ,
+	S_BEH             ,
+	S_TEH_MARBOOTA    ,
+	S_TEH             ,
+	S_THEH            ,
+	S_JEEM            ,
+	S_HAH             ,
+	S_KHAH            ,
+	S_DAL             ,
+	S_THAL            ,
+	S_REH             ,
+	S_ZAIN            ,
+	S_SEEN            ,
+	S_SHEEN           ,
+	S_SAD             ,
+	S_DAD             ,
+	S_TAH             ,
+	S_ZAH             ,
+	S_AIN             ,
+	S_GHAIN           ,
+	S_FEH             ,
+	S_QAF             ,
+	S_KAF             ,
+	S_LAM             ,
+	S_MEEM            ,
+	S_NOON            ,
+	S_HEH             ,
+	S_WAW             ,
+	S_YEH_NO_DOTS     ,
+	S_YEH_WITH_DOTS   ,
+	S_TATWEEL         ,
+	S_TANWEEN_FATHA   ,
+	S_TANWEEN_DAMA    ,
+	S_TANWEEN_KASRA   ,
+	S_FATHA           ,
+	S_DAMA            ,
+	S_KASRA           ,
+	S_SHADA           ,
+	S_SKOON
+};
+
+extern const std::wstring s_arabic_letters_without_tashkeel[] =
+{
+	S_HAMZA           ,
+	S_ALEF_MADDA      ,
+	S_ALEF_HAMZA_ABOVE,
+	S_WAW_HAMZA_ABOVE ,
+	S_ALEF_HAMZA_BELOW,
+	S_YEH_HAMZA_ABOVE ,
+	S_ALEF_NO_HAMZA   ,
+	S_BEH             ,
+	S_TEH_MARBOOTA    ,
+	S_TEH             ,
+	S_THEH            ,
+	S_JEEM            ,
+	S_HAH             ,
+	S_KHAH            ,
+	S_DAL             ,
+	S_THAL            ,
+	S_REH             ,
+	S_ZAIN            ,
+	S_SEEN            ,
+	S_SHEEN           ,
+	S_SAD             ,
+	S_DAD             ,
+	S_TAH             ,
+	S_ZAH             ,
+	S_AIN             ,
+	S_GHAIN           ,
+	S_FEH             ,
+	S_QAF             ,
+	S_KAF             ,
+	S_LAM             ,
+	S_MEEM            ,
+	S_NOON            ,
+	S_HEH             ,
+	S_WAW             ,
+	S_YEH_NO_DOTS     ,
+	S_YEH_WITH_DOTS
+};
 
 #endif // AR_LETTER_DEFINITIONS_H
