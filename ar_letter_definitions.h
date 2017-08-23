@@ -97,6 +97,9 @@
 #define S_SHADA            std::wstring(L"\u0651")
 #define S_SKOON            std::wstring(L"\u0652")
 
+namespace RDI
+{
+
 extern const std::vector<wchar_t> arabic_letters_with_tashkeel =
 {
 	HAMZA           ,
@@ -275,4 +278,5 @@ extern const std::vector<std::wstring> s_arabic_letters_without_tashkeel =
 	S_YEH_WITH_DOTS
 };
 
+}
 #endif // AR_LETTER_DEFINITIONS_H

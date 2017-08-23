@@ -5,6 +5,9 @@
 #include <map>
 #include <vector>
 
+namespace RDI
+{
+
 extern const std::map<wchar_t, char> arabic_to_buckwalter = {
 	{HAMZA           ,	'\''},
 	{ALEF_MADDA      ,	'|'	},
@@ -137,5 +140,6 @@ extern const std::map<wchar_t, char> wspace_to_space = {
 	{	L'\v',	'\v'  }
 };
 
+}
 
 #endif // BUCKWALTER_TRANSLITERATION_H
