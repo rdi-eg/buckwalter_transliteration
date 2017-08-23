@@ -1,5 +1,7 @@
 #include "buckwalter_conversions.h"
 
+#define DO_NOT_DEFINE_THE_ARRAYS
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -28,7 +30,7 @@ char convert_wspace_to_space(const wchar_t space)
 	return wspace_to_space.at(space);
 }
 
-wchar_t convert_wspace_to_space(const char space)
+wchar_t convert_space_to_wspace(const char space)
 {
 	assert ( within_vector(space, char_spaces) );
 
@@ -54,7 +56,7 @@ string handle_unknown_char(const wstring &input, size_t index, ReplaceNonArabic 
 	return output;
 }
 
-string convert_arabic_to_buckwalter(wstring arabic, ReplaceNonArabic replace_policy)
+string RDI::convert_arabic_to_buckwalter(wstring arabic, ReplaceNonArabic replace_policy)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
@@ -86,7 +88,7 @@ string convert_arabic_to_buckwalter(wstring arabic, ReplaceNonArabic replace_pol
 	return buckwalter;
 }
 
-wstring convert_buckwalter_to_arabic(string buckwlater)
+wstring RDI::convert_buckwalter_to_arabic(string buckwlater)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); // needed by the isspace and iswspace functions
 	wstring arabic;
