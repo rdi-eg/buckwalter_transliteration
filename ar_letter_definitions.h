@@ -4,6 +4,11 @@
 #include <string>
 #include <vector>
 
+/// If all you need is the below macro definitions for the Arabic alphabet then you can
+/// just include this header. You don't need to link to the library.
+/// However if you're interested in the definition of the maps, vectors and
+/// conversion functions then you must link your program to this library
+
 #define HAMZA            L'\u0621'
 #define ALEF_MADDA       L'\u0622'
 #define ALEF_HAMZA_ABOVE L'\u0623'
