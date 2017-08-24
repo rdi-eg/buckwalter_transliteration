@@ -10,6 +10,8 @@ namespace RDI
 
 extern const std::map<wchar_t, char> arabic_to_buckwalter;
 extern const std::map<char, wchar_t> buckwalter_to_arabic;
+extern const std::vector<char> buckwalter_letters_with_tashkeel;
+extern const std::vector<char> buckwalter_letters_without_tashkeel;
 extern const std::vector<char> char_spaces;
 extern const std::vector<wchar_t> wspaces;
 extern const std::map<char, wchar_t> space_to_wspace;

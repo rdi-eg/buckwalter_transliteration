@@ -103,14 +103,14 @@ wstring RDI::convert_buckwalter_to_arabic(string buckwlater)
 	{
 		if (isspace(buckwlater[i]))
 			private_arabic += convert_space_to_wspace(buckwlater[i]);
-		else if (within_vector(arabic[i], arabic_letters_with_tashkeel))
-			private_arabic += arabic_to_buckwalter.at(buckwlater[i]);
+		else if (within_vector(buckwlater[i], buckwalter_letters_with_tashkeel))
+			private_arabic += buckwalter_to_arabic.at(buckwlater[i]);
 
 		last_index = i;
 	}
 
 	#pragma omp critical
-	index_arabic[last_index - 1] = private_arabic;
+	index_arabic[last_index] = private_arabic;
 }
 
 	for (auto element : index_arabic)

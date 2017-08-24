@@ -6,7 +6,7 @@
 
 /// If all you need is the below macro definitions for the Arabic alphabet then you can
 /// just include this header. You don't need to link to the library.
-/// However if you're interested in the definition of the maps, vectors and
+/// However if you're interested in the definitions of the maps, vectors and
 /// conversion functions then you must link your program to this library
 
 #define HAMZA            L'\u0621'
