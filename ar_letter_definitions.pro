@@ -9,7 +9,7 @@ SOURCES += buckwalter_conversions.cpp \
 
 INCLUDEPATH += $$PWD/../include
 unix:!macx: LIBS += -L$$PWD/../lib_debug -lwFileIO
-unix:!macx: LIBS += -fopenmp
+unix:!macx: LIBS += -fPIC -fopenmp
 
 HEADERS += \
     ar_letter_definitions.h \

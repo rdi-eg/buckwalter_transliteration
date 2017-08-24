@@ -88,7 +88,7 @@ string RDI::convert_arabic_to_buckwalter(wstring arabic, ReplaceNonArabic replac
 	return buckwalter;
 }
 
-wstring RDI::convert_buckwalter_to_arabic(string buckwlater)
+wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); // needed by the isspace and iswspace functions
 	wstring arabic;
@@ -102,9 +102,15 @@ wstring RDI::convert_buckwalter_to_arabic(string buckwlater)
 	for (size_t i = 0; i < buckwlater.size(); i++)
 	{
 		if (isspace(buckwlater[i]))
+		{
 			private_arabic += convert_space_to_wspace(buckwlater[i]);
-		else if (within_vector(buckwlater[i], buckwalter_letters_with_tashkeel))
+		}
+		else if (within_vector(buckwlater[i],
+							   tashkeel ? buckwalter_letters_with_tashkeel :
+										  buckwalter_letters_without_tashkeel))
+		{
 			private_arabic += buckwalter_to_arabic.at(buckwlater[i]);
+		}
 
 		last_index = i;
 	}
@@ -117,4 +123,14 @@ wstring RDI::convert_buckwalter_to_arabic(string buckwlater)
 		arabic += element.second;
 
 	return arabic;
+}
+
+wstring RDI::convert_buckwalter_to_arabic(string buckwlater)
+{
+	return internal_convert_buckwalter_to_arabic(buckwlater, true);
+}
+
+wstring RDI::convert_buckwalter_to_arabic_no_tashkeel(string buckwlater)
+{
+	return internal_convert_buckwalter_to_arabic(buckwlater, false);
 }
