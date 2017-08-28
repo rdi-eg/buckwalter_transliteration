@@ -8,7 +8,7 @@ namespace RDI
 
 extern "C++"
 {
-	enum ReplaceNonArabic
+	enum ReplacePolicy
 	{
 		Delete,
 		UNK
@@ -17,7 +17,7 @@ extern "C++"
 	/// Converts Arabic to Buckwalter
 	/// replace_policy will either replace any non-arab characters with "<UNK>" without the quotations,
 	/// or it will be ignored completely and the resulting buckwalter string will not contain them
-	std::string convert_arabic_to_buckwalter(std::wstring arabic, ReplaceNonArabic replace_policy = ReplaceNonArabic::UNK);
+	std::string convert_arabic_to_buckwalter(std::wstring arabic, ReplacePolicy replace_policy = ReplacePolicy::Delete);
 
 	/// Converts Buckwalter to Arabic
 	/// If given any letters that are not defined in the buckwalter specification they

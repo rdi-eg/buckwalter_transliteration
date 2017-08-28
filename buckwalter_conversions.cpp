@@ -37,9 +37,11 @@ wchar_t convert_space_to_wspace(const char space)
 	return space_to_wspace.at(space);
 }
 
-string handle_unknown_char(const wstring &input, size_t index, ReplaceNonArabic replace_policy)
+
+/// the index is passed by reference because we need to move it to after the unknown characters.
+string handle_unknown_char(const wstring &input, size_t &index, ReplacePolicy replace_policy)
 {
-	if (replace_policy == ReplaceNonArabic::Delete)
+	if (replace_policy == ReplacePolicy::Delete)
 		return "";
 
 	assert(index < input.size());
@@ -50,40 +52,42 @@ string handle_unknown_char(const wstring &input, size_t index, ReplaceNonArabic 
 
 	output += "<UNK>";
 
-	if(index + 1 < input.size() && !iswspace(input[index + 1]))
+	for(; index < input.size(); index++)
+	{
+		if(iswspace(input[index]) || within_vector(input[index], arabic_letters_without_tashkeel))
+		{
+			break;
+		}
+	}
+
+	if (!iswspace(input[index]) && index == input.size() - 1)
 		output += " ";
+
+	index--;
 
 	return output;
 }
 
-string RDI::convert_arabic_to_buckwalter(wstring arabic, ReplaceNonArabic replace_policy)
+string RDI::convert_arabic_to_buckwalter(wstring arabic, ReplacePolicy replace_policy)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
-	map<int, string> index_buckwalter;
 
-#pragma omp parallel
-{
-	string private_buckwalter;
-	int last_index = 0;
-	#pragma omp for
 	for (size_t i = 0; i < arabic.size(); i++)
 	{
 		if (iswspace(arabic[i]))
-			private_buckwalter += convert_wspace_to_space(arabic[i]);
+		{
+			buckwalter += convert_wspace_to_space(arabic[i]);
+		}
 		else if (within_vector(arabic[i], arabic_letters_with_tashkeel))
-			private_buckwalter += arabic_to_buckwalter.at(arabic[i]);
-		else if (iswspace(arabic[i+1]) || within_vector(arabic[i+1], arabic_letters_with_tashkeel))
-			private_buckwalter += handle_unknown_char(arabic, i, replace_policy);
-		last_index = i;
+		{
+			buckwalter += arabic_to_buckwalter.at(arabic[i]);
+		}
+		else
+		{
+			buckwalter += handle_unknown_char(arabic, i, replace_policy);
+		}
 	}
-
-	#pragma omp critical
-	index_buckwalter[last_index - 1] = private_buckwalter;
-}
-
-	for (auto element : index_buckwalter)
-		buckwalter += element.second;
 
 	return buckwalter;
 }
@@ -116,7 +120,13 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 	}
 
 	#pragma omp critical
-	index_arabic[last_index] = private_arabic;
+	{
+		if(private_arabic != L"") // if this condition does not exist some kind of race condition happens
+								  // We don't know why it works this way but it works...
+		{
+			index_arabic[last_index] = private_arabic;
+		}
+	}
 }
 
 	for (auto element : index_arabic)
