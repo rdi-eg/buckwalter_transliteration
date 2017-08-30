@@ -42,7 +42,7 @@ wchar_t convert_space_to_wspace(const char space)
 
 
 /// the index is passed by reference because we need to move it to after the unknown characters.
-string handle_unknown_char(const wstring &input, size_t &index, std::vector<wstring> &unknowns)
+string handle_unknown_char(const wstring &input, size_t &index)
 {
 	assert(index < input.size());
 	string output;
@@ -51,7 +51,6 @@ string handle_unknown_char(const wstring &input, size_t &index, std::vector<wstr
 		output += " ";
 
 	output += "<UNK>";
-	wstring unknown;
 
 	for(; index < input.size(); index++)
 	{
@@ -59,11 +58,7 @@ string handle_unknown_char(const wstring &input, size_t &index, std::vector<wstr
 		{
 			break;
 		}
-
-		unknown += input[index];
 	}
-
-	unknowns.push_back(unknown);
 
 	if (!iswspace(input[index]) && index == input.size() - 1)
 		output += " ";
@@ -181,7 +176,7 @@ wstring convert_arabic_to_arabic_without_tashkeel(wstring arabic_with_tashkeel)
 	return output;
 }
 
-string convert_arabic_to_buckwalter(wstring arabic)
+string convert_arabic_to_buckwalter_remove_unknown(wstring arabic)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
@@ -201,7 +196,7 @@ string convert_arabic_to_buckwalter(wstring arabic)
 	return buckwalter;
 }
 
-string convert_arabic_to_buckwalter(wstring arabic, std::vector<wstring>& unknowns)
+string convert_arabic_to_buckwalter(wstring arabic)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
@@ -218,7 +213,7 @@ string convert_arabic_to_buckwalter(wstring arabic, std::vector<wstring>& unknow
 		}
 		else
 		{
-			buckwalter += handle_unknown_char(arabic, i, unknowns);
+			buckwalter += handle_unknown_char(arabic, i);
 		}
 	}
 

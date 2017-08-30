@@ -9,20 +9,13 @@ namespace RDI
 
 extern "C++"
 {
-	enum ReplacePolicy
-	{
-		Delete,
-		UNK
-	};
-
 	/// Converts Arabic to Buckwalter
 	/// Any non-arab characters will be ignored completely and the resulting buckwalter string will not contain them
-	std::string convert_arabic_to_buckwalter(std::wstring arabic);
+	std::string convert_arabic_to_buckwalter_remove_unknown(std::wstring arabic);
 
 	/// Converts Arabic to Buckwalter
-	/// replace any non-arab characters with "<UNK>",
-	/// and returns the unknowns in the second argument in the same order as they were placed in the original string
-	std::string convert_arabic_to_buckwalter(std::wstring arabic, std::vector<std::wstring> &unknowns);
+	/// replace any non-arab characters with "<UNK>"
+	std::string convert_arabic_to_buckwalter(std::wstring arabic);
 
 	/// Converts Buckwalter to Arabic
 	/// If given any letters that are not defined in the buckwalter specification they
