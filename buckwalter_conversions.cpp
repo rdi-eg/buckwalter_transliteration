@@ -1,7 +1,5 @@
 #include "buckwalter_conversions.h"
 
-#define DO_NOT_DEFINE_THE_ARRAYS
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -10,7 +8,12 @@
 #include "buckwalter_transliteration.h"
 
 using namespace std;
-using namespace RDI;
+
+namespace RDI
+{
+
+namespace RDIInternal
+{
 
 template <typename T>
 bool within_vector(T element, const vector<T> v)
@@ -39,11 +42,8 @@ wchar_t convert_space_to_wspace(const char space)
 
 
 /// the index is passed by reference because we need to move it to after the unknown characters.
-string handle_unknown_char(const wstring &input, size_t &index, ReplacePolicy replace_policy)
+string handle_unknown_char(const wstring &input, size_t &index, std::vector<wstring> &unknowns)
 {
-	if (replace_policy == ReplacePolicy::Delete)
-		return "";
-
 	assert(index < input.size());
 	string output;
 
@@ -51,6 +51,7 @@ string handle_unknown_char(const wstring &input, size_t &index, ReplacePolicy re
 		output += " ";
 
 	output += "<UNK>";
+	wstring unknown;
 
 	for(; index < input.size(); index++)
 	{
@@ -58,7 +59,11 @@ string handle_unknown_char(const wstring &input, size_t &index, ReplacePolicy re
 		{
 			break;
 		}
+
+		unknown += input[index];
 	}
+
+	unknowns.push_back(unknown);
 
 	if (!iswspace(input[index]) && index == input.size() - 1)
 		output += " ";
@@ -66,30 +71,6 @@ string handle_unknown_char(const wstring &input, size_t &index, ReplacePolicy re
 	index--;
 
 	return output;
-}
-
-string RDI::convert_arabic_to_buckwalter(wstring arabic, ReplacePolicy replace_policy)
-{
-	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
-	string buckwalter;
-
-	for (size_t i = 0; i < arabic.size(); i++)
-	{
-		if (iswspace(arabic[i]))
-		{
-			buckwalter += convert_wspace_to_space(arabic[i]);
-		}
-		else if (within_vector(arabic[i], arabic_letters_with_tashkeel))
-		{
-			buckwalter += arabic_to_buckwalter.at(arabic[i]);
-		}
-		else
-		{
-			buckwalter += handle_unknown_char(arabic, i, replace_policy);
-		}
-	}
-
-	return buckwalter;
 }
 
 wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
@@ -135,12 +116,113 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 	return arabic;
 }
 
-wstring RDI::convert_buckwalter_to_arabic(string buckwlater)
+} // namespace RDIInternal
+
+using namespace RDIInternal;
+
+wstring convert_buckwalter_to_arabic(string buckwlater)
 {
 	return internal_convert_buckwalter_to_arabic(buckwlater, true);
 }
 
-wstring RDI::convert_buckwalter_to_arabic_no_tashkeel(string buckwlater)
+wstring convert_buckwalter_to_arabic_no_tashkeel(string buckwlater)
 {
 	return internal_convert_buckwalter_to_arabic(buckwlater, false);
 }
+
+string convert_buckwalter_to_buckwalter_without_tashkeel(string buckwalter)
+{
+	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
+	string output;
+
+	for (size_t i = 0; i < buckwalter.size(); i++)
+	{
+		if (within_vector(buckwalter[i], buckwalter_letters_without_tashkeel))
+		{
+			output += buckwalter[i];
+		}
+	}
+
+	return output;
+}
+
+wstring convert_arabic_to_arabic_without_tashkeel(wstring arabic_with_tashkeel)
+{
+	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
+	wstring output;
+	map<int, wstring> index_arabic;
+#pragma omp parallel
+{
+	wstring private_output;
+	int last_index = 0;
+	#pragma omp for
+	for (size_t i = 0; i < arabic_with_tashkeel.size(); i++)
+	{
+		if (iswspace(arabic_with_tashkeel[i]) ||
+				within_vector(arabic_with_tashkeel[i], arabic_letters_without_tashkeel))
+		{
+			private_output += arabic_with_tashkeel[i];
+		}
+		last_index = i;
+	}
+
+	#pragma omp critical
+	{
+		if(private_output != L"") // if this condition does not exist some kind of race condition happens
+								  // We don't know why it works this way but it works...
+		{
+			index_arabic[last_index] = private_output;
+		}
+	}
+}
+	for (auto element : index_arabic)
+		output += element.second;
+
+	return output;
+}
+
+string convert_arabic_to_buckwalter(wstring arabic)
+{
+	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
+	string buckwalter;
+
+	for (size_t i = 0; i < arabic.size(); i++)
+	{
+		if (iswspace(arabic[i]))
+		{
+			buckwalter += convert_wspace_to_space(arabic[i]);
+		}
+		else if (within_vector(arabic[i], arabic_letters_with_tashkeel))
+		{
+			buckwalter += arabic_to_buckwalter.at(arabic[i]);
+		}
+	}
+
+	return buckwalter;
+}
+
+string convert_arabic_to_buckwalter(wstring arabic, std::vector<wstring>& unknowns)
+{
+	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
+	string buckwalter;
+
+	for (size_t i = 0; i < arabic.size(); i++)
+	{
+		if (iswspace(arabic[i]))
+		{
+			buckwalter += convert_wspace_to_space(arabic[i]);
+		}
+		else if (within_vector(arabic[i], arabic_letters_with_tashkeel))
+		{
+			buckwalter += arabic_to_buckwalter.at(arabic[i]);
+		}
+		else
+		{
+			buckwalter += handle_unknown_char(arabic, i, unknowns);
+		}
+	}
+
+	return buckwalter;
+}
+
+} // namespace RDI
