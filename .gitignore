@@ -1,1 +1,4 @@
+*.db
+.vs/
 *.pro.user
+x64/

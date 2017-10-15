@@ -1,12 +1,12 @@
-#include "buckwalter_conversions.h"
+#include "rdi_buckwalter_conversions.h"
 
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <assert.h>
 #include <omp.h>
-#include "buckwalter_transliteration.h"
-
+#include "rdi_buckwalter_transliteration.h"
+#include <clocale>
 using namespace std;
 
 namespace RDI

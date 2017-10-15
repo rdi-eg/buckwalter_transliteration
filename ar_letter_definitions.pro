@@ -12,6 +12,6 @@ unix:!macx: LIBS += -L$$PWD/../lib_debug -lwFileIO
 unix:!macx: LIBS += -fPIC -fopenmp
 
 HEADERS += \
-    ar_letter_definitions.h \
-    buckwalter_transliteration.h \
-    buckwalter_conversions.h
+    rdi_ar_letter_definitions.h \
+    rdi_buckwalter_conversions.h \
+    rdi_buckwalter_transliteration.h
