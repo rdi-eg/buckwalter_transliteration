@@ -89,7 +89,10 @@ extern const std::vector<wchar_t> arabic_letters_without_tashkeel =
 	HEH             ,
 	WAW             ,
 	YEH_NO_DOTS     ,
-	YEH_WITH_DOTS
+	YEH_WITH_DOTS   ,
+	FASLA_MANKOOTA  ,
+	QUESTION_MARK   ,
+	FASLA
 };
 
 extern const std::vector<std::wstring> s_arabic_letters_with_tashkeel =
@@ -178,7 +181,10 @@ extern const std::vector<std::wstring> s_arabic_letters_without_tashkeel =
 	S_HEH             ,
 	S_WAW             ,
 	S_YEH_NO_DOTS     ,
-	S_YEH_WITH_DOTS
+	S_YEH_WITH_DOTS   ,
+	S_FASLA_MANKOOTA  ,
+	S_QUESTION_MARK   ,
+	S_FASLA
 };
 
 }
