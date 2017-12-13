@@ -57,7 +57,6 @@
 #define KASRA            L'\u0650'
 #define SHADA            L'\u0651'
 #define SKOON            L'\u0652'
-#define zero             L''
 
 // same thing but strings instead of chars
 
