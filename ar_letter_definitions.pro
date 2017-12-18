@@ -8,8 +8,6 @@ SOURCES += buckwalter_conversions.cpp \
     ar_letter_definitions.cpp
 
 INCLUDEPATH += $$PWD/../include
-unix:!macx: LIBS += -L$$PWD/../lib_debug -lwFileIO
-unix:!macx: LIBS += -fPIC -fopenmp
 
 HEADERS += \
     rdi_ar_letter_definitions.h \
