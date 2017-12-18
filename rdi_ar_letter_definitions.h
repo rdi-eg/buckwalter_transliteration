@@ -9,6 +9,9 @@
 /// However if you're interested in the definitions of the maps, vectors and
 /// conversion functions then you must link your program to this library
 
+#define FASLA            L'\u060C'
+#define QUESTION_MARK    L'\u060F'
+#define FASLA_MANKOOTA   L'\u060B'
 #define HAMZA            L'\u0621'
 #define ALEF_MADDA       L'\u0622'
 #define ALEF_HAMZA_ABOVE L'\u0623'
@@ -56,6 +59,10 @@
 #define SKOON            L'\u0652'
 
 // same thing but strings instead of chars
+
+#define S_FASLA            std::wstring(L"\u060C")
+#define S_QUESTION_MARK    std::wstring(L"\u061F")
+#define S_FASLA_MANKOOTA   std::wstring(L"\u061B")
 #define S_HAMZA            std::wstring(L"\u0621")
 #define S_ALEF_MADDA       std::wstring(L"\u0622")
 #define S_ALEF_HAMZA_ABOVE std::wstring(L"\u0623")
