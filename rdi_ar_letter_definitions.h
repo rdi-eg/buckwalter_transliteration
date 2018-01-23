@@ -10,7 +10,7 @@
 /// conversion functions then you must link your program to this library
 
 #define FASLA            L'\u060C'
-#define QUESTION_MARK    L'\u060F'
+#define QUESTION_MARK    L'\u061F'
 #define FASLA_MANKOOTA   L'\u060B'
 #define HAMZA            L'\u0621'
 #define ALEF_MADDA       L'\u0622'
