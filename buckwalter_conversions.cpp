@@ -200,8 +200,8 @@ string convert_arabic_to_buckwalter(wstring arabic)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
-
-	for (size_t i = 0; i < arabic.size(); i++)
+	int sz = arabic.size();
+	for (size_t i = 0; i < sz; i++)
 	{
 		if (iswspace(arabic[i]))
 		{
