@@ -132,7 +132,11 @@ string convert_buckwalter_to_buckwalter_without_tashkeel(string buckwalter)
 
 	for (size_t i = 0; i < buckwalter.size(); i++)
 	{
-		if (within_vector(buckwalter[i], buckwalter_letters_without_tashkeel))
+		if (iswspace(buckwalter[i]))
+		{
+			output += buckwalter[i];
+		}
+		else if (within_vector(buckwalter[i], buckwalter_letters_without_tashkeel))
 		{
 			output += buckwalter[i];
 		}
