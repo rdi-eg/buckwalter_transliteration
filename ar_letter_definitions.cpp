@@ -183,4 +183,47 @@ extern const std::vector<std::wstring> _s_arabic_letters_without_tashkeel =
 
 };
 
+extern const std::vector<wchar_t> _arabic_letters_with_symbols
+{
+	HAMZA           ,
+	ALEF_MADDA      ,
+	ALEF_HAMZA_ABOVE,
+	WAW_HAMZA_ABOVE ,
+	ALEF_HAMZA_BELOW,
+	YEH_HAMZA_ABOVE ,
+	ALEF_NO_HAMZA   ,
+	BEH             ,
+	TEH_MARBOOTA    ,
+	TEH             ,
+	THEH            ,
+	JEEM            ,
+	HAH             ,
+	KHAH            ,
+	DAL             ,
+	THAL            ,
+	REH             ,
+	ZAIN            ,
+	SEEN            ,
+	SHEEN           ,
+	SAD             ,
+	DAD             ,
+	TAH             ,
+	ZAH             ,
+	AIN             ,
+	GHAIN           ,
+	FEH             ,
+	QAF             ,
+	KAF             ,
+	LAM             ,
+	MEEM            ,
+	NOON            ,
+	HEH             ,
+	WAW             ,
+	YEH_NO_DOTS     ,
+	YEH_WITH_DOTS   ,
+	FASLA_MANKOOTA  ,
+	QUESTION_MARK   ,
+	FASLA
+};
+
 }
