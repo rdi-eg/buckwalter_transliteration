@@ -17,6 +17,11 @@ extern "C++"
 	/// replace any non-arab characters with "<UNK>"
 	std::string convert_arabic_to_buckwalter(std::wstring arabic);
 
+	/// Converts Arabic to Buckwalter
+	/// replace any non-arab characters with "<UNK>"
+	/// return a list of any non-arab characters
+	std::string convert_arabic_to_buckwalter(std::wstring arabic,std::vector<wchar_t>& unkown_chars);
+
 	/// Converts Buckwalter to Arabic
 	/// If given any letters that are not defined in the buckwalter specification they
 	/// will be erased from the resulting wstring
@@ -32,6 +37,7 @@ extern "C++"
 
 	/// Any unknown character will be discarded
 	std::wstring convert_arabic_to_arabic_without_tashkeel(std::wstring arabic_with_tashkeel);
+
 }
 
 }

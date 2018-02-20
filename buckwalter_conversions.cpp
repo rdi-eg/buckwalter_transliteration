@@ -231,4 +231,28 @@ string convert_arabic_to_buckwalter(wstring arabic)
 	return buckwalter;
 }
 
+string convert_arabic_to_buckwalter(wstring arabic,vector<wchar_t>& unkown_chars)
+{
+	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
+	string buckwalter;
+	int sz = arabic.size();
+	for (size_t i = 0; i < sz; i++)
+	{
+		if (iswspace(arabic[i]))
+		{
+			buckwalter += convert_wspace_to_space(arabic[i]);
+		}
+		else if (within_vector(arabic[i], arabic_letters_with_tashkeel))
+		{
+			buckwalter += arabic_to_buckwalter.at(arabic[i]);
+		}
+		else
+		{
+			buckwalter +="!";
+			unkown_chars.push_back(arabic[i]);
+		}
+	}
+
+	return buckwalter;
+}
 } // namespace RDI
