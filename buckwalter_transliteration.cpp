@@ -98,7 +98,6 @@ extern const std::map<char, wchar_t> buckwalter_to_arabic = {
 	{	'~'	,	SHADA           },
 	{	'o'	,	SKOON           }
  };
-
 extern const std::vector<char> buckwalter_letters_with_tashkeel = {
 	'\'',
 	'|'	,

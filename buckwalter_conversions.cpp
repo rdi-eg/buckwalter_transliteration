@@ -40,7 +40,6 @@ wchar_t convert_space_to_wspace(const char space)
 	return space_to_wspace.at(space);
 }
 
-
 /// the index is passed by reference because we need to move it to after the unknown characters.
 string handle_unknown_char(const wstring &input, size_t &index)
 {
@@ -50,7 +49,7 @@ string handle_unknown_char(const wstring &input, size_t &index)
 	if (index > 0 && !iswspace(input[index - 1]))
 		output += " ";
 
-	output += "<UNK>";
+	output +=  "!";// ((! ==<UNK>))
 
 	for(; index < input.size(); index++)
 	{
@@ -91,6 +90,10 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 		{
 			private_arabic += buckwalter_to_arabic.at(buckwlater[i]);
 		}
+		else if(buckwlater[i]=='!')// '!' == <UNK>
+		{
+			private_arabic += L"<UNK>";
+		}
 
 		last_index = i;
 	}
@@ -104,7 +107,6 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 		}
 	}
 }
-
 	for (auto element : index_arabic)
 		arabic += element.second;
 
@@ -140,6 +142,11 @@ string convert_buckwalter_to_buckwalter_without_tashkeel(string buckwalter)
 		{
 			output += buckwalter[i];
 		}
+		else if(buckwalter[i]=='!') // '!' == <UNK>
+		{
+			output += buckwalter[i];
+		}
+
 	}
 
 	return output;
