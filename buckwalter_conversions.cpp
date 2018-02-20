@@ -53,7 +53,7 @@ string handle_unknown_char(const wstring &input, size_t &index)
 
 	for(; index < input.size(); index++)
 	{
-		if(iswspace(input[index]) || within_vector(input[index], arabic_letters_without_tashkeel))
+		if(iswspace(input[index]) || within_vector(input[index], _arabic_letters_without_tashkeel))
 		{
 			break;
 		}
@@ -216,7 +216,7 @@ wstring convert_arabic_to_arabic_without_tashkeel(wstring arabic_with_tashkeel)
 	for (size_t i = 0; i < arabic_with_tashkeel.size(); i++)
 	{
 		if (iswspace(arabic_with_tashkeel[i]) ||
-				within_vector(arabic_with_tashkeel[i], arabic_letters_without_tashkeel))
+				within_vector(arabic_with_tashkeel[i], _arabic_letters_without_tashkeel))
 		{
 			private_output += arabic_with_tashkeel[i];
 		}
@@ -249,7 +249,7 @@ string convert_arabic_to_buckwalter_remove_unknown(wstring arabic)
 		{
 			buckwalter += convert_wspace_to_space(arabic[i]);
 		}
-		else if (within_vector(arabic[i], arabic_letters_with_tashkeel))
+		else if (within_vector(arabic[i], _arabic_letters_with_tashkeel))
 		{
 			buckwalter += arabic_to_buckwalter.at(arabic[i]);
 		}
@@ -269,7 +269,7 @@ string convert_arabic_to_buckwalter(wstring arabic)
 		{
 			buckwalter += convert_wspace_to_space(arabic[i]);
 		}
-		else if (within_vector(arabic[i], arabic_letters_with_tashkeel))
+		else if (within_vector(arabic[i], _arabic_letters_with_tashkeel))
 		{
 			buckwalter += arabic_to_buckwalter.at(arabic[i]);
 		}
@@ -293,7 +293,7 @@ string convert_arabic_to_buckwalter(wstring arabic,wstring& unkown_chars)
 		{
 			buckwalter += convert_wspace_to_space(arabic[i]);
 		}
-		else if (within_vector(arabic[i], arabic_letters_with_tashkeel))
+		else if (within_vector(arabic[i], _arabic_letters_with_tashkeel))
 		{
 			buckwalter += arabic_to_buckwalter.at(arabic[i]);
 		}

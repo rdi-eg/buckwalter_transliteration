@@ -112,10 +112,10 @@
 namespace RDI
 {
 
-extern const std::vector<wchar_t> arabic_letters_with_tashkeel;
-extern const std::vector<wchar_t> arabic_letters_without_tashkeel;
-extern const std::vector<std::wstring> s_arabic_letters_with_tashkeel;
-extern const std::vector<std::wstring> s_arabic_letters_without_tashkeel;
+extern const std::vector<wchar_t> _arabic_letters_with_tashkeel;
+extern const std::vector<wchar_t> _arabic_letters_without_tashkeel;
+extern const std::vector<std::wstring> _s_arabic_letters_with_tashkeel;
+extern const std::vector<std::wstring> _s_arabic_letters_without_tashkeel;
 
 }
 #endif // AR_LETTER_DEFINITIONS_H
