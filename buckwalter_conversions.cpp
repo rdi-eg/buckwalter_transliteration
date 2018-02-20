@@ -113,6 +113,53 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 	return arabic;
 }
 
+wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel,const wstring& orignal_unknowns)
+{
+	std::setlocale(LC_ALL, "en_US.UTF8"); // needed by the isspace and iswspace functions
+	wstring arabic;
+	map<int, wstring> index_arabic;
+
+#pragma omp parallel
+{
+	wstring private_arabic;
+	int last_index = 0;
+	int unk_index = 0;
+	#pragma omp for
+	for (size_t i = 0; i < buckwlater.size(); i++)
+	{
+		if (isspace(buckwlater[i]))
+		{
+			private_arabic += convert_space_to_wspace(buckwlater[i]);
+		}
+		else if (within_vector(buckwlater[i],
+							   tashkeel ? buckwalter_letters_with_tashkeel :
+										  buckwalter_letters_without_tashkeel))
+		{
+			private_arabic += buckwalter_to_arabic.at(buckwlater[i]);
+		}
+		else if(buckwlater[i]=='!')// '!' == <UNK>
+		{
+			private_arabic += orignal_unknowns[unk_index++];
+		}
+
+		last_index = i;
+	}
+
+	#pragma omp critical
+	{
+		if(private_arabic != L"") // if this condition does not exist some kind of race condition happens
+								  // We don't know why it works this way but it works...
+		{
+			index_arabic[last_index] = private_arabic;
+		}
+	}
+}
+	for (auto element : index_arabic)
+		arabic += element.second;
+
+	return arabic;
+}
+
 } // namespace RDIInternal
 
 using namespace RDIInternal;
@@ -120,6 +167,10 @@ using namespace RDIInternal;
 wstring convert_buckwalter_to_arabic(string buckwlater)
 {
 	return internal_convert_buckwalter_to_arabic(buckwlater, true);
+}
+wstring convert_buckwalter_to_arabic(string buckwlater,const wstring& orignal_unknowns)
+{
+	return internal_convert_buckwalter_to_arabic(buckwlater, true,orignal_unknowns);
 }
 
 wstring convert_buckwalter_to_arabic_no_tashkeel(string buckwlater)
@@ -231,7 +282,7 @@ string convert_arabic_to_buckwalter(wstring arabic)
 	return buckwalter;
 }
 
-string convert_arabic_to_buckwalter(wstring arabic,vector<wchar_t>& unkown_chars)
+string convert_arabic_to_buckwalter(wstring arabic,wstring& unkown_chars)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
