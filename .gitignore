@@ -1,4 +1,5 @@
 *.db
 .vs/
 *.pro.user
+*.pro.user.*
 x64/
