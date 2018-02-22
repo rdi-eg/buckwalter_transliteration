@@ -66,6 +66,38 @@ string handle_unknown_char(const wstring &input, size_t &index)
 
 	return output;
 }
+/*
+ *return one unkown to backwalter "!" and save the opposite countinuous non-arabic chars
+*/
+string handle_unknown_char(const wstring &input, size_t &index,wstring& continuous_unkowns)
+{
+	assert(index < input.size());
+	string output;
+	continuous_unkowns = L"";
+	if (index > 0 && !iswspace(input[index - 1]))
+		output += " ";
+
+	output +=  "!";// ((! ==<UNK>))
+
+	for(; index < input.size(); index++)
+	{
+		if(iswspace(input[index]) || within_vector(input[index], _arabic_letters_with_tashkeel))
+		{
+			break;
+		}
+		else
+		{
+			continuous_unkowns+=input[index];
+		}
+	}
+
+	if (!iswspace(input[index]) && index == input.size() - 1)
+		output += " ";
+
+	index--;
+
+	return output;
+}
 
 wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 {
@@ -113,49 +145,28 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 	return arabic;
 }
 
-wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel,const wstring& orignal_unknowns)
+wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel,const std::vector<wstring>& orignal_unknowns)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); // needed by the isspace and iswspace functions
 	wstring arabic;
-	map<int, wstring> index_arabic;
-
-#pragma omp parallel
-{
-	wstring private_arabic;
-	int last_index = 0;
 	int unk_index = 0;
-	#pragma omp for
 	for (size_t i = 0; i < buckwlater.size(); i++)
 	{
 		if (isspace(buckwlater[i]))
 		{
-			private_arabic += convert_space_to_wspace(buckwlater[i]);
+			arabic += convert_space_to_wspace(buckwlater[i]);
 		}
 		else if (within_vector(buckwlater[i],
 							   tashkeel ? buckwalter_letters_with_tashkeel :
 										  buckwalter_letters_without_tashkeel))
 		{
-			private_arabic += buckwalter_to_arabic.at(buckwlater[i]);
+			arabic += buckwalter_to_arabic.at(buckwlater[i]);
 		}
 		else if(buckwlater[i]=='!')// '!' == <UNK>
 		{
-			private_arabic += orignal_unknowns[unk_index++];
-		}
-
-		last_index = i;
-	}
-
-	#pragma omp critical
-	{
-		if(private_arabic != L"") // if this condition does not exist some kind of race condition happens
-								  // We don't know why it works this way but it works...
-		{
-			index_arabic[last_index] = private_arabic;
+			arabic += orignal_unknowns[unk_index++];
 		}
 	}
-}
-	for (auto element : index_arabic)
-		arabic += element.second;
 
 	return arabic;
 }
@@ -168,7 +179,7 @@ wstring convert_buckwalter_to_arabic(string buckwlater)
 {
 	return internal_convert_buckwalter_to_arabic(buckwlater, true);
 }
-wstring convert_buckwalter_to_arabic(string buckwlater,const wstring& orignal_unknowns)
+wstring convert_buckwalter_to_arabic(string buckwlater,const std::vector<wstring>&orignal_unknowns)
 {
 	return internal_convert_buckwalter_to_arabic(buckwlater, true,orignal_unknowns);
 }
@@ -281,8 +292,10 @@ string convert_arabic_to_buckwalter(wstring arabic)
 
 	return buckwalter;
 }
-
-string convert_arabic_to_buckwalter(wstring arabic,wstring& unkown_chars)
+/*
+ *return backwlater and for each unkown  "!" it saves a list of the opposite countinuous non-arabic chars
+*/
+string convert_arabic_to_buckwalter(wstring arabic,std::vector<wstring>& unkown_chars)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
@@ -299,8 +312,9 @@ string convert_arabic_to_buckwalter(wstring arabic,wstring& unkown_chars)
 		}
 		else
 		{
-			buckwalter +="!";
-			unkown_chars.push_back(arabic[i]);
+			wstring continuous_unkowns;
+			buckwalter +=handle_unknown_char(arabic, i,continuous_unkowns);
+			unkown_chars.push_back(continuous_unkowns);
 		}
 	}
 

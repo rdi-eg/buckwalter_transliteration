@@ -18,9 +18,9 @@ extern "C++"
 	std::string convert_arabic_to_buckwalter(std::wstring arabic);
 
 	/// Converts Arabic to Buckwalter
-	/// replace any non-arab characters with "<UNK>"
+	/// replace each non-arab characters with "<UNK>" with a list of the opposite countinuous non-arabic chars
 	/// return a list of any non-arab characters
-	std::string convert_arabic_to_buckwalter(std::wstring arabic,std::wstring& unkown_chars);
+	std::string convert_arabic_to_buckwalter(std::wstring arabic,std::vector<std::wstring>& unkown_chars);
 
 	/// Converts Buckwalter to Arabic
 	/// If given any letters that are not defined in the buckwalter specification they
@@ -32,7 +32,7 @@ extern "C++"
 	/// If given any letters that are not defined in the buckwalter specification they
 	/// will be erased from the resulting wstring
 
-	std::wstring convert_buckwalter_to_arabic(std::string buckwlater,const std::wstring& orignal_unknowns);
+	std::wstring convert_buckwalter_to_arabic(std::string buckwlater,const std::vector<std::wstring>& orignal_unknowns);
 
 	/// Same as above but it does not any letters that are not defined
 	/// in the buckwalter specification (except for the tashkeel)
