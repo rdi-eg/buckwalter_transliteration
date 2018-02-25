@@ -51,6 +51,18 @@ extern const std::vector<wchar_t> _arabic_letters_with_tashkeel =
 	SHADA           ,
 	SKOON
 };
+extern const std::vector<wchar_t> _arabic_tashkeel =
+{
+	TATWEEL         ,
+	TANWEEN_FATHA   ,
+	TANWEEN_DAMA    ,
+	TANWEEN_KASRA   ,
+	FATHA           ,
+	DAMA            ,
+	KASRA           ,
+	SHADA           ,
+	SKOON
+};
 
 extern const std::vector<wchar_t> _arabic_letters_without_tashkeel =
 {
