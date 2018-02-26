@@ -74,8 +74,8 @@ string handle_unknown_char(const wstring &input, size_t &index,wstring& continuo
 	assert(index < input.size());
 	string output;
 	continuous_unkowns = L"";
-	if (index > 0 && !iswspace(input[index - 1]))
-		output += " ";
+	//	if (index > 0 && !iswspace(input[index - 1]))
+	//		output += " ";
 
 	output +=  "!";// ((! ==<UNK>))
 
@@ -91,8 +91,8 @@ string handle_unknown_char(const wstring &input, size_t &index,wstring& continuo
 		}
 	}
 
-	if (!iswspace(input[index]) && index == input.size() - 1)
-		output += " ";
+	//	if (!iswspace(input[index]) && index == input.size() - 1)
+	//		output += " ";
 
 	index--;
 
@@ -106,39 +106,39 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 	map<int, wstring> index_arabic;
 
 #pragma omp parallel
-{
-	wstring private_arabic;
-	int last_index = 0;
-	#pragma omp for
-	for (size_t i = 0; i < buckwlater.size(); i++)
 	{
-		if (isspace(buckwlater[i]))
+		wstring private_arabic;
+		int last_index = 0;
+#pragma omp for
+		for (size_t i = 0; i < buckwlater.size(); i++)
 		{
-			private_arabic += convert_space_to_wspace(buckwlater[i]);
-		}
-		else if (within_vector(buckwlater[i],
-							   tashkeel ? buckwalter_letters_with_tashkeel :
-										  buckwalter_letters_without_tashkeel))
-		{
-			private_arabic += buckwalter_to_arabic.at(buckwlater[i]);
-		}
-		else if(buckwlater[i]=='!')// '!' == <UNK>
-		{
-			private_arabic += L"<UNK>";
+			if (isspace(buckwlater[i]))
+			{
+				private_arabic += convert_space_to_wspace(buckwlater[i]);
+			}
+			else if (within_vector(buckwlater[i],
+								   tashkeel ? buckwalter_letters_with_tashkeel :
+								   buckwalter_letters_without_tashkeel))
+			{
+				private_arabic += buckwalter_to_arabic.at(buckwlater[i]);
+			}
+			else if(buckwlater[i]=='!')// '!' == <UNK>
+			{
+				private_arabic += L"<UNK>";
+			}
+
+			last_index = i;
 		}
 
-		last_index = i;
-	}
-
-	#pragma omp critical
-	{
-		if(private_arabic != L"") // if this condition does not exist some kind of race condition happens
-								  // We don't know why it works this way but it works...
+#pragma omp critical
 		{
-			index_arabic[last_index] = private_arabic;
+			if(private_arabic != L"") // if this condition does not exist some kind of race condition happens
+				// We don't know why it works this way but it works...
+			{
+				index_arabic[last_index] = private_arabic;
+			}
 		}
 	}
-}
 	for (auto element : index_arabic)
 		arabic += element.second;
 
@@ -158,7 +158,7 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel,c
 		}
 		else if (within_vector(buckwlater[i],
 							   tashkeel ? buckwalter_letters_with_tashkeel :
-										  buckwalter_letters_without_tashkeel))
+							   buckwalter_letters_without_tashkeel))
 		{
 			arabic += buckwalter_to_arabic.at(buckwlater[i]);
 		}
@@ -220,29 +220,29 @@ wstring convert_arabic_to_arabic_without_tashkeel(wstring arabic_with_tashkeel)
 	wstring output;
 	map<int, wstring> index_arabic;
 #pragma omp parallel
-{
-	wstring private_output;
-	int last_index = 0;
-	#pragma omp for
-	for (size_t i = 0; i < arabic_with_tashkeel.size(); i++)
 	{
-		if (iswspace(arabic_with_tashkeel[i]) ||
-				within_vector(arabic_with_tashkeel[i], _arabic_letters_without_tashkeel))
+		wstring private_output;
+		int last_index = 0;
+#pragma omp for
+		for (size_t i = 0; i < arabic_with_tashkeel.size(); i++)
 		{
-			private_output += arabic_with_tashkeel[i];
+			if (iswspace(arabic_with_tashkeel[i]) ||
+					within_vector(arabic_with_tashkeel[i], _arabic_letters_without_tashkeel))
+			{
+				private_output += arabic_with_tashkeel[i];
+			}
+			last_index = i;
 		}
-		last_index = i;
-	}
 
-	#pragma omp critical
-	{
-		if(private_output != L"") // if this condition does not exist some kind of race condition happens
-								  // We don't know why it works this way but it works...
+#pragma omp critical
 		{
-			index_arabic[last_index] = private_output;
+			if(private_output != L"") // if this condition does not exist some kind of race condition happens
+				// We don't know why it works this way but it works...
+			{
+				index_arabic[last_index] = private_output;
+			}
 		}
 	}
-}
 	for (auto element : index_arabic)
 		output += element.second;
 
@@ -295,26 +295,82 @@ string convert_arabic_to_buckwalter(wstring arabic)
 /*
  *return backwlater and for each unkown  "!" it saves a list of the opposite countinuous non-arabic chars
 */
-string convert_arabic_to_buckwalter(wstring arabic,std::vector<wstring>& unkown_chars)
+
+string handle_tashkeel(const wstring &input, size_t &index)
+{
+	assert(index < input.size());
+	string continuous_tshkeel;
+
+	for(; index < input.size(); index++)
+	{
+		if( within_vector(input[index], _arabic_tashkeel))
+		{
+			continuous_tshkeel+= arabic_to_buckwalter.at(input[index]);
+		}
+		else
+		{
+			break;
+		}
+	}
+	index--;
+
+	return continuous_tshkeel;
+}
+
+string convert_arabic_to_buckwalter_no_tahkeel(wstring arabic,std::vector<wstring>& unkown_chars , std::vector<string>& orignal_letter_formarion)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
 	int sz = arabic.size();
+	bool my_previous_is_aletter = false;
 	for (size_t i = 0; i < sz; i++)
 	{
 		if (iswspace(arabic[i]))
 		{
+			if(my_previous_is_aletter)
+			{
+				orignal_letter_formarion.push_back("");
+				my_previous_is_aletter = false;
+			}
 			buckwalter += convert_wspace_to_space(arabic[i]);
+			orignal_letter_formarion.push_back("");
+
 		}
-		else if (within_vector(arabic[i], _arabic_letters_with_tashkeel))
+
+		else if (within_vector(arabic[i], _arabic_letters_without_tashkeel))
 		{
+
 			buckwalter += arabic_to_buckwalter.at(arabic[i]);
+			if(my_previous_is_aletter)
+			{
+				orignal_letter_formarion.push_back("");
+			}
+			if(i==sz-1)
+			{
+				orignal_letter_formarion.push_back(""); // handel if last element with no tashkeel
+			}
+			my_previous_is_aletter = true;
+		}
+		else  if (within_vector(arabic[i], _arabic_tashkeel))
+		{
+			if(my_previous_is_aletter)
+			{
+				string letter_tashkeel = handle_tashkeel(arabic,i);
+				orignal_letter_formarion.push_back(letter_tashkeel);
+				my_previous_is_aletter = false;
+			}
 		}
 		else
 		{
+			if(my_previous_is_aletter)
+			{
+				orignal_letter_formarion.push_back("");
+				my_previous_is_aletter = false;
+			}
 			wstring continuous_unkowns;
 			buckwalter +=handle_unknown_char(arabic, i,continuous_unkowns);
 			unkown_chars.push_back(continuous_unkowns);
+			orignal_letter_formarion.push_back("");
 		}
 	}
 

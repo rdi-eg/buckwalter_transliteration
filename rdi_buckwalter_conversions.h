@@ -18,9 +18,12 @@ extern "C++"
 	std::string convert_arabic_to_buckwalter(std::wstring arabic);
 
 	/// Converts Arabic to Buckwalter
-	/// replace each non-arab characters with "<UNK>" with a list of the opposite countinuous non-arabic chars
-	/// return a list of any non-arab characters
-	std::string convert_arabic_to_buckwalter(std::wstring arabic,std::vector<std::wstring>& unkown_chars);
+	/// replace each non-arab characters with "!" with a list of the opposite countinuous non-arabic chars
+	/// save list of any non-arab characters in unkown_chars
+	/// save a list of arabic formation he found in the text in orignal_letter_formarion
+	/// return a backwalter line with unknown and without tahkeel
+	std::string convert_arabic_to_buckwalter_no_tahkeel(std::wstring arabic,std::vector<std::wstring>& unkown_chars ,
+												   std::vector<std::string>& orignal_letter_formarion);
 
 	/// Converts Buckwalter to Arabic
 	/// If given any letters that are not defined in the buckwalter specification they
