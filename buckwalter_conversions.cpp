@@ -292,9 +292,19 @@ string convert_arabic_to_buckwalter(wstring arabic)
 
 	return buckwalter;
 }
-/*
- *return backwlater and for each unkown  "!" it saves a list of the opposite countinuous non-arabic chars
-*/
+
+bool is_all_tashekeel_or_empty(wstring &input)
+{
+	if(input.empty()) return true;
+	for(int index = 0 ; index < input.size(); index++)
+	{
+		if(!within_vector(input[index], _arabic_tashkeel))
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 string handle_tashkeel(const wstring &input, size_t &index)
 {
@@ -316,7 +326,9 @@ string handle_tashkeel(const wstring &input, size_t &index)
 
 	return continuous_tshkeel;
 }
-
+/*
+ *return backwlater and for each unkown  "!" it saves a list of the opposite countinuous non-arabic chars
+*/
 string convert_arabic_to_buckwalter_no_tahkeel(wstring arabic,std::vector<wstring>& unkown_chars , std::vector<string>& orignal_letter_formarion)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
