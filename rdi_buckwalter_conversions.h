@@ -20,11 +20,11 @@ extern "C++"
 	/// Converts Arabic to Buckwalter
 	/// replace each non-arab characters with "!" with a list of the opposite countinuous non-arabic chars
 	/// save list of any non-arab characters in unkown_chars
+	/// save list of continuous spaces in spaces
 	/// save a list of arabic formation he found in the text in orignal_letter_formarion
 	/// return a backwalter line with unknown and without tahkeel
 	std::string convert_arabic_to_buckwalter_no_tahkeel(std::wstring arabic,std::vector<std::wstring>& unkown_chars ,
-												   std::vector<std::string>& orignal_letter_formarion);
-
+												   std::vector<std::wstring>& spaces , std::vector<std::string>& orignal_letter_formarion);
 	/// Converts Buckwalter to Arabic
 	/// If given any letters that are not defined in the buckwalter specification they
 	/// will be erased from the resulting wstring
