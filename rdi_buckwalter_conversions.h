@@ -35,7 +35,7 @@ extern "C++"
 	/// If given any letters that are not defined in the buckwalter specification they
 	/// will be erased from the resulting wstring
 
-	std::wstring convert_buckwalter_to_arabic(std::string buckwlater,const std::vector<std::wstring>& orignal_unknowns);
+	std::wstring convert_buckwalter_to_arabic(std::string buckwlater,const std::vector<std::wstring>& orignal_unknowns,const std::vector<std::wstring>& orignal_wspaces);
 
 	/// Same as above but it does not any letters that are not defined
 	/// in the buckwalter specification (except for the tashkeel)

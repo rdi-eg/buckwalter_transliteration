@@ -156,16 +156,18 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel)
 	return arabic;
 }
 
-wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel,const std::vector<wstring>& orignal_unknowns)
+wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel,const std::vector<wstring>& orignal_unknowns,
+											  const std::vector<wstring>& orignal_wspaces)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); // needed by the isspace and iswspace functions
 	wstring arabic;
 	int unk_index = 0;
+	int wspace_index = 0;
 	for (size_t i = 0; i < buckwlater.size(); i++)
 	{
 		if (isspace(buckwlater[i]))
 		{
-			arabic += convert_space_to_wspace(buckwlater[i]);
+			arabic += orignal_wspaces[wspace_index++];
 		}
 		else if (within_vector(buckwlater[i],
 							   tashkeel ? buckwalter_letters_with_tashkeel :
@@ -178,7 +180,6 @@ wstring internal_convert_buckwalter_to_arabic(string buckwlater, bool tashkeel,c
 			arabic += orignal_unknowns[unk_index++];
 		}
 	}
-
 	return arabic;
 }
 
@@ -190,9 +191,9 @@ wstring convert_buckwalter_to_arabic(string buckwlater)
 {
 	return internal_convert_buckwalter_to_arabic(buckwlater, true);
 }
-wstring convert_buckwalter_to_arabic(string buckwlater,const std::vector<wstring>&orignal_unknowns)
+wstring convert_buckwalter_to_arabic(string buckwlater,const std::vector<wstring>&orignal_unknowns,const std::vector<wstring>& orignal_wspaces)
 {
-	return internal_convert_buckwalter_to_arabic(buckwlater, true,orignal_unknowns);
+	return internal_convert_buckwalter_to_arabic(buckwlater, true,orignal_unknowns,orignal_wspaces);
 }
 
 wstring convert_buckwalter_to_arabic_no_tashkeel(string buckwlater)
