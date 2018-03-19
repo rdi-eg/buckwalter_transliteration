@@ -77,7 +77,7 @@ string handle_unknown_char(const wstring &input, size_t &index,wstring& continuo
 	output +=  "!";// ((! ==<UNK>))
 	for(; index < input.size(); index++)
 	{
-		if(iswspace(input[index]) || within_vector(input[index], _arabic_letters_with_tashkeel))
+		if(iswspace(input[index]) || within_vector(input[index], _arabic_letters_without_tashkeel))
 		{
 			break;
 		}
@@ -388,14 +388,12 @@ string convert_arabic_to_buckwalter_no_tahkeel(wstring arabic,std::vector<wstrin
 			}
 			my_previous_is_aletter = true;
 		}
-		else  if (within_vector(arabic[i], _arabic_tashkeel))
+		else  if (within_vector(arabic[i], _arabic_tashkeel)&&my_previous_is_aletter)
 		{
-			if(my_previous_is_aletter)
-			{
 				string letter_tashkeel = handle_tashkeel(arabic,i);
 				orignal_letter_formarion.push_back(letter_tashkeel);
 				my_previous_is_aletter = false;
-			}
+
 		}
 		else
 		{
