@@ -47,8 +47,10 @@ extern "C++"
 
 	/// Any unknown character will be discarded
 	std::wstring convert_arabic_to_arabic_without_tashkeel(std::wstring arabic_with_tashkeel);
-//check if the line is empty or all chars on it is tashkeel
-	bool is_all_tashekeel_or_empty(std::wstring &input);
+	///check if the line is not empty or all characters is out of arabic letters
+	bool is_vaild_line(std::wstring &input);
+	///check if all arabic letters have formate and the user need to keep formattions
+	bool is_arabic_all_letters_fromated(std::wstring &input,bool keep_orignal_formation);
 }
 
 }

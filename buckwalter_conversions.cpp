@@ -277,7 +277,6 @@ string convert_arabic_to_buckwalter_remove_unknown(wstring arabic)
 			buckwalter += arabic_to_buckwalter.at(arabic[i]);
 		}
 	}
-
 	return buckwalter;
 }
 
@@ -305,17 +304,30 @@ string convert_arabic_to_buckwalter(wstring arabic)
 	return buckwalter;
 }
 
-bool is_all_tashekeel_or_empty(wstring &input)
+bool is_arabic_all_letters_fromated(wstring &input,bool keep_orignal_formation)
 {
-	if(input.empty()) return true;
-	for(int index = 0 ; index < input.size(); index++)
+
+	for(int index = 0 ; index < input.size()-1; index++)
 	{
-		if(!within_vector(input[index], _arabic_tashkeel))
+		if(within_vector(input[index], _arabic_letters_without_tashkeel) &&
+			(!within_vector(input[index+1], _arabic_tashkeel)))
 		{
 			return false;
 		}
 	}
-	return true;
+	return (true&&keep_orignal_formation);
+}
+bool is_vaild_line(wstring &input)
+{
+	if(input.empty()) return false;
+	for(int index = 0 ; index < input.size(); index++)
+	{
+		if(within_vector(input[index], _arabic_letters_without_tashkeel))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 string handle_tashkeel(const wstring &input, size_t &index)
