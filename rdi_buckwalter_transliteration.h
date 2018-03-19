@@ -16,6 +16,8 @@ extern const std::vector<char> char_spaces;
 extern const std::vector<wchar_t> wspaces;
 extern const std::map<char, wchar_t> space_to_wspace;
 extern const std::map<wchar_t, char> wspace_to_space;
+extern const std::map<wchar_t, char> tashkeel_to_queen;
+
 
 }
 

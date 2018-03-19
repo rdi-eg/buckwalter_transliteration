@@ -284,8 +284,8 @@ string convert_arabic_to_buckwalter(wstring arabic)
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
-	int sz = arabic.size();
-	for (size_t i = 0; i < sz; i++)
+
+	for (size_t i = 0; i < arabic.size(); i++)
 	{
 		if (iswspace(arabic[i]))
 		{
@@ -306,7 +306,6 @@ string convert_arabic_to_buckwalter(wstring arabic)
 
 bool is_arabic_all_letters_fromated(wstring &input,bool keep_orignal_formation)
 {
-
 	for(int index = 0 ; index < input.size()-1; index++)
 	{
 		if(within_vector(input[index], _arabic_letters_without_tashkeel) &&
@@ -358,7 +357,7 @@ string convert_arabic_to_buckwalter_no_tahkeel(wstring arabic,std::vector<wstrin
 {
 	std::setlocale(LC_ALL, "en_US.UTF8"); //needed by the isspace and iswspace functions
 	string buckwalter;
-	int sz = arabic.size();
+	size_t sz = arabic.size();
 	bool my_previous_is_aletter = false;
 	for (size_t i = 0; i < sz; i++)
 	{
