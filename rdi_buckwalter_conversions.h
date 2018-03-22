@@ -20,11 +20,11 @@ extern "C++"
 	/// Converts Arabic to Buckwalter
 	/// replace each non-arab characters with "!" with a list of the opposite countinuous non-arabic chars
 	/// save list of any non-arab characters in unkown_chars
+	/// save list of continuous spaces in spaces
 	/// save a list of arabic formation he found in the text in orignal_letter_formarion
 	/// return a backwalter line with unknown and without tahkeel
 	std::string convert_arabic_to_buckwalter_no_tahkeel(std::wstring arabic,std::vector<std::wstring>& unkown_chars ,
-												   std::vector<std::string>& orignal_letter_formarion);
-
+												   std::vector<std::wstring>& spaces , std::vector<std::string>& orignal_letter_formarion);
 	/// Converts Buckwalter to Arabic
 	/// If given any letters that are not defined in the buckwalter specification they
 	/// will be erased from the resulting wstring
@@ -35,7 +35,7 @@ extern "C++"
 	/// If given any letters that are not defined in the buckwalter specification they
 	/// will be erased from the resulting wstring
 
-	std::wstring convert_buckwalter_to_arabic(std::string buckwlater,const std::vector<std::wstring>& orignal_unknowns);
+	std::wstring convert_buckwalter_to_arabic(std::string buckwlater,const std::vector<std::wstring>& orignal_unknowns,const std::vector<std::wstring>& orignal_wspaces);
 
 	/// Same as above but it does not any letters that are not defined
 	/// in the buckwalter specification (except for the tashkeel)
@@ -47,8 +47,10 @@ extern "C++"
 
 	/// Any unknown character will be discarded
 	std::wstring convert_arabic_to_arabic_without_tashkeel(std::wstring arabic_with_tashkeel);
-//check if the line is empty or all chars on it is tashkeel
-	bool is_all_tashekeel_or_empty(std::wstring &input);
+	///check if the line is not empty or all characters is out of arabic letters
+	bool is_vaild_line(std::wstring &input);
+	///check if all arabic letters have formate and the user need to keep formattions
+	bool is_arabic_all_letters_fromated(std::wstring &input,bool keep_orignal_formation);
 }
 
 }
